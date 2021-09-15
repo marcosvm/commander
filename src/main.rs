@@ -1,3 +1,6 @@
+mod command_line;
+
+#[allow(unused_imports)]
 use std::process::Command;
 
 fn main() {
