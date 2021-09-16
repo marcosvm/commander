@@ -1,4 +1,6 @@
 use serde::Deserialize;
+use std::fmt::{Display, Formatter};
+use std::fs::read_to_string;
 
 /// Commandline represents one executable command and its arguments
 #[derive(Debug, PartialEq, Deserialize)]
@@ -6,6 +8,42 @@ pub struct CommandLine {
     executable: String,
     arguments: Option<Vec<String>>,
 }
+
+impl CommandLine {
+    fn from_yaml(path: &str) -> Result<Vec<Self>> {
+        let text = read_to_string(path)?;
+        Ok(serde_yaml::from_str::<Vec<CommandLine>>(&text)?)
+    }
+}
+
+impl From<std::io::Error> for Error {
+    fn from(err: std::io::Error) -> Self {
+        Error::new(err.to_string())
+    }
+}
+
+impl From<serde_yaml::Error> for Error {
+    fn from(err: serde_yaml::Error) -> Self {
+        Error::new(err.to_string())
+    }
+}
+#[derive(Debug)]
+struct Error {
+    message: String,
+}
+
+impl Error {
+    fn new(message: String) -> Self {
+        Error { message }
+    }
+}
+
+impl Display for Error {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.message)
+    }
+}
+type Result<T> = std::result::Result<T, self::Error>;
 
 #[test]
 fn parse_yaml_input() {
@@ -110,9 +148,8 @@ fn parse_yaml_file_into_commands() {
         },
     ];
 
-    let input = std::fs::read_to_string("./fixtures/input.yaml").unwrap();
     assert_eq!(
         commands,
-        serde_yaml::from_str::<Vec<CommandLine>>(&input).unwrap()
+        CommandLine::from_yaml("./fixtures/input.yaml").unwrap()
     );
 }
