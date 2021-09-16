@@ -14,6 +14,11 @@ impl CommandLine {
         let text = read_to_string(path)?;
         Ok(serde_yaml::from_str::<Vec<CommandLine>>(&text)?)
     }
+
+    fn from_json(path: &str) -> Result<Vec<Self>> {
+        let text = read_to_string(path)?;
+        Ok(serde_json::from_str::<Vec<CommandLine>>(&text)?)
+    }
 }
 
 impl From<std::io::Error> for Error {
@@ -27,6 +32,13 @@ impl From<serde_yaml::Error> for Error {
         Error::new(err.to_string())
     }
 }
+
+impl From<serde_json::Error> for Error {
+    fn from(err: serde_json::Error) -> Self {
+        Error::new(err.to_string())
+    }
+}
+
 #[derive(Debug)]
 struct Error {
     message: String,
@@ -116,10 +128,9 @@ fn parse_json_file_into_commands() {
         },
     ];
 
-    let input = std::fs::read_to_string("./fixtures/input.json").unwrap();
     assert_eq!(
         commands,
-        serde_json::from_str::<Vec<CommandLine>>(&input).unwrap()
+        CommandLine::from_json("./fixtures/input.json").unwrap()
     );
 }
 
