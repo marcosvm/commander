@@ -165,7 +165,7 @@ fn parse_yaml_file_into_commands() {
         },
         CommandLine {
             executable: "/bin/ps".to_string(),
-            arguments: Some(vec!["-ef".to_string()]),
+            arguments: Some(vec!["-1".to_string()]),
         },
     ];
 
