@@ -9,9 +9,6 @@ use structopt::StructOpt;
 #[derive(Debug, StructOpt)]
 #[structopt(name = "commander", about = "Running many command lines")]
 struct Opt {
-    /// Activate debug mode
-    #[structopt(short, long)]
-    debug: bool,
     /// Input file
     #[structopt(parse(from_os_str))]
     file: PathBuf,
