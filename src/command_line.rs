@@ -1,6 +1,7 @@
 use serde::Deserialize;
 use std::fmt::{Display, Formatter};
 use std::fs::read_to_string;
+use std::process::Command;
 
 /// Commandline represents one executable command and its arguments
 #[derive(Debug, PartialEq, Deserialize)]
@@ -10,14 +11,23 @@ pub struct CommandLine {
 }
 
 impl CommandLine {
-    fn from_yaml(path: &str) -> Result<Vec<Self>> {
+    pub(crate) fn from_yaml(path: &str) -> Result<Vec<Self>> {
         let text = read_to_string(path)?;
         Ok(serde_yaml::from_str::<Vec<CommandLine>>(&text)?)
     }
 
-    fn from_json(path: &str) -> Result<Vec<Self>> {
+    pub(crate) fn from_json(path: &str) -> Result<Vec<Self>> {
         let text = read_to_string(path)?;
         Ok(serde_json::from_str::<Vec<CommandLine>>(&text)?)
+    }
+}
+impl From<&CommandLine> for Command {
+    fn from(item: &CommandLine) -> Self {
+        let mut command = Command::new(item.executable.clone());
+        for args in item.arguments.as_ref().into_iter() {
+            command.args(args);
+        }
+        command
     }
 }
 
@@ -40,7 +50,7 @@ impl From<serde_json::Error> for Error {
 }
 
 #[derive(Debug)]
-struct Error {
+pub(crate) struct Error {
     message: String,
 }
 

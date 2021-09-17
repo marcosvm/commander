@@ -9,4 +9,4 @@
 - executable: /bin/ps
 - executable: /bin/ps
   arguments:
-  - -ef
+  - -1
