@@ -1,0 +1,12 @@
+---
+- executable: /bin/bash
+  arguments:
+  - 1
+  - duo
+  - three
+- executable: /scripts/command
+  arguments: []
+- executable: /bin/ps
+- executable: /bin/ps
+  arguments:
+  - -1
