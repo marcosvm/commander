@@ -2,7 +2,6 @@ mod command_line;
 
 use crate::command_line::CommandLine;
 use chrono::Utc;
-use env_logger;
 use log::info;
 use std::path::PathBuf;
 use std::process;
