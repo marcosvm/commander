@@ -1,6 +1,9 @@
 mod command_line;
 
 use crate::command_line::CommandLine;
+use chrono::Utc;
+use env_logger;
+use log::info;
 use std::path::PathBuf;
 use std::process;
 use std::process::Command;
@@ -18,6 +21,7 @@ struct Opt {
 
 fn main() -> Result<(), command_line::Error> {
     let opt = Opt::from_args();
+    env_logger::init();
 
     let filename = match opt.file.as_path().to_str() {
         Some(filename) => filename,
@@ -38,6 +42,9 @@ fn main() -> Result<(), command_line::Error> {
 
     for command_line in commands.iter() {
         let mut command = Command::from(command_line);
+        info!("running {:?}", command);
+        let start_time = Utc::now();
+        let mut status = "SUCCESS";
         let output = command.output();
         match output {
             Ok(output) => {
@@ -50,8 +57,17 @@ fn main() -> Result<(), command_line::Error> {
                     std::str::from_utf8(&output.stderr).unwrap_or_default()
                 );
             }
-            Err(e) => eprintln!("command failed: {}", e),
+            Err(e) => {
+                eprintln!("command failed: {}", e);
+                status = "FAIL"
+            }
         }
+
+        let elapsed_time = Utc::now().timestamp_millis() - start_time.timestamp_millis();
+        info!(
+            "finished='{:?}',time elapsed={}ms,status={}",
+            command, elapsed_time, status
+        );
     }
 
     Ok(())
