@@ -15,3 +15,11 @@ gives
 ```→ file target/x86_64-unknown-linux-musl/release/commander
 target/x86_64-unknown-linux-musl/release/commander: ELF 64-bit LSB pie executable, x86-64, version 1 (SYSV), dynamically linked, with debug_info, not stripped
 ```
+
+# Experimental
+
+```
+bazel build commander
+```
+
+and find executable at: bazel-bin/commander

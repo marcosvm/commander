@@ -1,1 +1,5 @@
 /target
+bazel-bin
+bazel-commander
+bazel-out
+bazel-testlogs

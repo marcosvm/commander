@@ -1,0 +1,20 @@
+load("@rules_rust//rust:defs.bzl", "rust_binary")
+
+package(default_visibility = ["//visibility:public"])
+
+rust_binary(
+    name = "commander",
+    srcs = [
+        "src/command_line.rs",
+        "src/main.rs",
+    ],
+    deps = [
+        "//cargo:chrono",
+        "//cargo:env_logger",
+        "//cargo:log",
+        "//cargo:serde",
+        "//cargo:serde_json",
+        "//cargo:serde_yaml",
+        "//cargo:structopt",
+    ],
+)

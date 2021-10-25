@@ -13,3 +13,12 @@ structopt = "0.3"
 log = "0.4"
 env_logger = "0.9"
 chrono = "0.4"
+
+[package.metadata.raze]
+workspace_path="//cargo"
+# package_aliases_dir = "."
+targets = [
+    "x86_64-apple-darwin",
+    "x86_64-unknown-linux-gnu",
+]
+genmode = "Remote"
